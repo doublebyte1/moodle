@@ -10,6 +10,9 @@ services:
       - MARIADB_COLLATE=utf8mb4_unicode_ci
     volumes:
       - 'mariadb_data:/bitnami/mariadb'
+    restart_policy:
+      condition: on-failure
+
   moodle:
     image: 'docker.io/bitnami/moodle:3-debian-10'
     ports:
@@ -21,15 +24,16 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
       - MOODLE_USERNAME=user
       - MOODLE_PASSWORD=mysecretpassword
-      - PHP_MEMORY_LIMIT=1GB
-      - PHP_POST_MAX_SIZE=1GB
-      - PHP_UPLOAD_MAX_FILESIZE=1GB
-
+      - PHP_POST_MAX_SIZE=1G
+      - PHP_UPLOAD_MAX_FILESIZE=1G
     volumes:
       - 'moodle_data:/bitnami/moodle'
       - 'moodledata_data:/bitnami/moodledata'
     depends_on:
       - mariadb
+    restart_policy:
+      condition: on-failure
+      
 volumes:
   mariadb_data:
     driver: local
